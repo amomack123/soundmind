@@ -1,0 +1,12 @@
+modal
+kafka-python
+fastapi
+pydantic
+uvicorn
+docker
+numpy
+scipy
+torch
+tensorflow
+librosa
+soundfile
