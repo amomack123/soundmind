@@ -1,12 +1,5 @@
-modal
-kafka-python
-fastapi
-pydantic
-uvicorn
-docker
-numpy
-scipy
-torch
-tensorflow
-librosa
-soundfile
+# Kafka client
+kafka-python==2.2.2
+
+# Optional: better console output
+rich==13.7.1

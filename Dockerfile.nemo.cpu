@@ -1,0 +1,29 @@
+# Dockerfile.nemo.cpu
+FROM python:3.10-slim
+
+# System deps
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ffmpeg git curl ca-certificates && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /app
+COPY . /app
+
+# Faster, cleaner pip
+ENV PIP_NO_CACHE_DIR=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+# CPU PyTorch + torchaudio
+RUN python -m pip install --upgrade pip && \
+    python -m pip install --upgrade \
+      torch torchaudio --index-url https://download.pytorch.org/whl/cpu && \
+    python -m pip install \
+      "nemo_toolkit[audio]" soundfile kafka-python
+
+# Quick sanity check at build time
+RUN python - <<'PY'
+import torch
+print("Torch:", torch.__version__, "CUDA available:", torch.cuda.is_available())
+PY
+
+CMD ["/bin/bash"]
