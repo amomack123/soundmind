@@ -1,0 +1,41 @@
+# modal_jobs/diarizer_worker/modal_entry.py
+from __future__ import annotations
+from typing import Any, Dict
+import time
+from .diarizer import run_diarization as _run_diarization
+
+def run_on_accelerator(
+    audio_path: str,
+    job_id: str,
+    params: Dict[str, Any] | None = None,
+) -> dict:
+    """
+    Unified accelerator entry. Returns:
+      {
+        "stage": "diarization",
+        "artifacts": [segments_rttm, timeline_json],
+        "metrics": {"duration_ms": int},
+        "model": "<model_id>",
+        "job_id": "<job_id>",
+        ... (full diarizer meta)
+      }
+    """
+    t0 = time.time()
+    # NOTE: _run_diarization(audio_path, job_id) has no 'params' kwarg
+    meta = _run_diarization(job_id=job_id, audio_path=audio_path)
+
+    segments = meta.get("segments_rttm")
+    timeline  = meta.get("timeline_json")
+
+    return {
+        "stage": "diarization",
+        "artifacts": [p for p in (segments, timeline) if p],
+        "metrics": {"duration_ms": int((time.time() - t0) * 1000)},
+        "model": meta.get("model", "pyannote-default"),
+        "job_id": job_id,
+        **meta,
+    }
+
+# Optional shim
+def diarize(audio_path: str, job_id: str, params: Dict[str, Any] | None = None) -> dict:
+    return run_on_accelerator(audio_path=audio_path, job_id=job_id, params=params)

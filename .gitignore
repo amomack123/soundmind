@@ -11,3 +11,6 @@ outputs/
 .DS_Store
 .vscode/
 .idea/
+
+.env
+*.log

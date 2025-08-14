@@ -1,5 +1,16 @@
 # Kafka client
 kafka-python==2.2.2
 
+# Core pipeline deps
+pyannote.audio>=3.1
+pyannote.core>=5.0
+pyannote.metrics>=3.2
+soundfile>=0.12
+structlog>=24.1
+numpy>=1.26
+
 # Optional: better console output
-rich==13.7.1
+rich>=13.7
+
+# Modal SDK/CLI (allows running modal deploy and using modal in Python)
+modal
