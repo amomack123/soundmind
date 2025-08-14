@@ -14,3 +14,4 @@ rich>=13.7
 
 # Modal SDK/CLI (allows running modal deploy and using modal in Python)
 modal
+boto3>=1.34
